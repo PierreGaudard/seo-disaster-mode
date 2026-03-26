@@ -5,6 +5,7 @@ import os, random, datetime
 
 DOMAIN = "https://pierregaudard.github.io/seo-disaster-mode"
 BASE = os.path.dirname(os.path.abspath(__file__))
+P = "/seo-disaster-mode/"  # Base path prefix for GitHub Pages
 random.seed(42)
 
 # ═══════════════════════════════════════════════════════
@@ -212,13 +213,13 @@ def img_path(key):
     return IMG.get(key, IMG["hero"])
 
 def broken_img():
-    return f'<img src="{random.choice(BROKEN_IMG)}">'
+    return f'<img src="{P}{random.choice(BROKEN_IMG)}">'
 
 def img_no_alt(key="hero"):
-    return f'<img src="{img_path(key)}">'
+    return f'<img src="{P}{img_path(key)}">'
 
 def img_ok(key="hero", alt="Photo de mode"):
-    return f'<img src="{img_path(key)}" alt="{alt}">'
+    return f'<img src="{P}{img_path(key)}" alt="{alt}">'
 
 def top_bar():
     return '<div class="top-bar">Livraison offerte dès 100€ d\'achat — Retours gratuits sous 30 jours</div>'
@@ -227,19 +228,19 @@ def header_html():
     return f"""
     <header class="header">
         <div class="container">
-            <a href="index.html" class="logo">Mode<span>Style</span></a>
+            <a href="{P}index.html" class="logo">Mode<span>Style</span></a>
             <nav>
-                <a href="robes/index.html">Robes</a>
-                <a href="chaussures/index.html">Chaussures</a>
-                <a href="accessoires/index.html">Accessoires</a>
-                <a href="sacs-a-main/index.html">Sacs</a>
-                <a href="bijoux/index.html">Bijoux</a>
+                <a href="{P}robes/index.html">Robes</a>
+                <a href="{P}chaussures/index.html">Chaussures</a>
+                <a href="{P}accessoires/index.html">Accessoires</a>
+                <a href="{P}sacs-a-main/index.html">Sacs</a>
+                <a href="{P}bijoux/index.html">Bijoux</a>
                 <!-- BUG SEO: lien HTTP mixte -->
                 <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
-                <a href="tendances/index.html">Tendances</a>
+                <a href="{P}tendances/index.html">Tendances</a>
                 <!-- BUG SEO: lien 404 -->
-                <a href="nouvelle-collection.html">Nouveau</a>
-                <a href="blog/index.html">Journal</a>
+                <a href="{P}nouvelle-collection.html">Nouveau</a>
+                <a href="{P}blog/index.html">Journal</a>
             </nav>
         </div>
     </header>"""
@@ -267,22 +268,22 @@ def footer_html():
                 <div>
                     <h4>Boutique</h4>
                     <ul>
-                        <li><a href="robes/index.html">Robes</a></li>
-                        <li><a href="chaussures/index.html">Chaussures</a></li>
-                        <li><a href="sacs-a-main/index.html">Sacs à Main</a></li>
-                        <li><a href="bijoux/index.html">Bijoux</a></li>
+                        <li><a href="{P}robes/index.html">Robes</a></li>
+                        <li><a href="{P}chaussures/index.html">Chaussures</a></li>
+                        <li><a href="{P}sacs-a-main/index.html">Sacs à Main</a></li>
+                        <li><a href="{P}bijoux/index.html">Bijoux</a></li>
                         <!-- BUG SEO: 404 -->
-                        <li><a href="{ghost}.html">Offres Spéciales</a></li>
+                        <li><a href="{P}{ghost}.html">Offres Spéciales</a></li>
                     </ul>
                 </div>
                 <div>
                     <h4>Informations</h4>
                     <ul>
                         <!-- BUG SEO: plusieurs 404 -->
-                        <li><a href="mentions-legales.html">Mentions Légales</a></li>
-                        <li><a href="cgv.html">CGV</a></li>
-                        <li><a href="plan-du-site.html">Plan du Site</a></li>
-                        <li><a href="guide/morphologie.html">Guide Morphologie</a></li>
+                        <li><a href="{P}mentions-legales.html">Mentions Légales</a></li>
+                        <li><a href="{P}cgv.html">CGV</a></li>
+                        <li><a href="{P}plan-du-site.html">Plan du Site</a></li>
+                        <li><a href="{P}guide/morphologie.html">Guide Morphologie</a></li>
                     </ul>
                 </div>
                 <div>
@@ -364,7 +365,7 @@ def h1_tag(text, issues):
 
 def ghost_links(n=2):
     gs = random.sample(GHOST_PAGES, k=min(n, len(GHOST_PAGES)))
-    return "\n".join(f'<a href="{g}.html" class="btn btn-dark">{g.replace("-"," ").title()}</a>' for g in gs)
+    return "\n".join(f'<a href="{P}{g}.html" class="btn btn-dark">{g.replace("-"," ").title()}</a>' for g in gs)
 
 # ═══════════════════════════════════════════════════════
 # PAGE BUILDERS
@@ -380,7 +381,7 @@ def build_page(path, title, desc, body, issues=None):
     {title_tag(title, issues)}
     {meta_tag(desc, issues)}
     {canonical_tag(path, issues)}
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="{P}css/style.css">
 </head>
 <body>
     {top_bar()}
@@ -398,7 +399,7 @@ def build_homepage():
     cat_cards = ""
     for slug, name, img_key, desc in CATEGORIES[:6]:
         cat_cards += f"""
-        <a href="{slug}/index.html" class="category-card">
+        <a href="{P}{slug}/index.html" class="category-card">
             {img_no_alt(img_key)}
             <div class="overlay">
                 <h3>{name}</h3>
@@ -423,7 +424,7 @@ def build_homepage():
         badge = '<span class="badge">Nouveau</span>' if i < 2 else ""
         old = f'<span class="old-price">{price + random.randint(30,80)},00 €</span>' if price > 0 and random.random() > 0.6 else ""
         prod_cards += f"""
-        <a href="{cs}/{ps}.html" class="product-card">
+        <a href="{P}{cs}/{ps}.html" class="product-card">
             <div class="image-wrapper">
                 {img_tag}
                 {badge}
@@ -438,7 +439,7 @@ def build_homepage():
     blog_cards = ""
     for slug, title, cat, excerpt, img_key in BLOG_ARTICLES[:3]:
         blog_cards += f"""
-        <a href="{slug}.html" class="blog-card">
+        <a href="{P}{slug}.html" class="blog-card">
             <div class="image-wrapper">
                 {img_no_alt(img_key)}
             </div>
@@ -453,11 +454,11 @@ def build_homepage():
     body = f"""
     <section class="hero">
         {img_no_alt("hero")}
-        <img src="{img_path('hero')}" class="hero-bg">
+        <img src="{P}{img_path('hero')}" class="hero-bg">
         <div class="hero-content">
             <h1>L'Élégance à la Parisienne</h1>
             <p>Découvrez notre nouvelle collection printemps-été 2025, inspirée par les rues de Paris.</p>
-            <a href="soldes-hiver-2024.html" class="btn">Découvrir la Collection</a>
+            <a href="{P}soldes-hiver-2024.html" class="btn">Découvrir la Collection</a>
         </div>
     </section>
 
@@ -479,7 +480,7 @@ def build_homepage():
         <div class="content">
             <h2>Collection Exclusive Printemps 2025</h2>
             <p>Des pièces uniques créées en collaboration avec les plus grands designers français. Disponible en édition limitée.</p>
-            <a href="collection-limitee-ete.html" class="btn">Voir la Collection</a>
+            <a href="{P}collection-limitee-ete.html" class="btn">Voir la Collection</a>
         </div>
     </section>
 
@@ -501,7 +502,7 @@ def build_homepage():
         <div class="content">
             <h2>Mode Homme — Nouvelle Saison</h2>
             <p>Élégance et modernité pour l'homme contemporain. Découvrez notre sélection masculine.</p>
-            <a href="vetements-homme/index.html" class="btn">Explorer</a>
+            <a href="{P}vetements-homme/index.html" class="btn">Explorer</a>
         </div>
     </section>
 
@@ -546,7 +547,7 @@ def build_category(idx, slug, name, img_key, desc):
         badge = '<span class="badge">-30%</span>' if random.random() > 0.7 else ""
         old = f'<span class="old-price">{price + random.randint(30,100)},00 €</span>' if price > 0 and random.random() > 0.5 else ""
         cards += f"""
-        <a href="{slug}/{ps}.html" class="product-card">
+        <a href="{P}{slug}/{ps}.html" class="product-card">
             <div class="image-wrapper">{img_t}{badge}</div>
             <div class="info">
                 <div class="brand">{brand}</div>
@@ -557,11 +558,11 @@ def build_category(idx, slug, name, img_key, desc):
 
     # BUG: liens vers produits inexistants
     cards += f"""
-    <a href="{slug}/produit-supprime-ancien.html" class="product-card">
+    <a href="{P}{slug}/produit-supprime-ancien.html" class="product-card">
         <div class="image-wrapper">{broken_img()}</div>
         <div class="info"><div class="brand">ARCHIVE</div><h3>Article en Rupture</h3><div class="price">--,-- €</div></div>
     </a>
-    <a href="{slug}/collection-archivee.html" class="product-card">
+    <a href="{P}{slug}/collection-archivee.html" class="product-card">
         <div class="image-wrapper">{img_no_alt(img_key)}</div>
         <div class="info"><div class="brand">ARCHIVE</div><h3>Collection Archivée</h3><div class="price">--,-- €</div></div>
     </a>"""
@@ -576,7 +577,7 @@ def build_category(idx, slug, name, img_key, desc):
     </section>
     <div class="container">
         <div class="breadcrumb">
-            <a href="index.html">Accueil</a> <span>›</span> {name}
+            <a href="{P}index.html">Accueil</a> <span>›</span> {name}
         </div>
     </div>
     <section class="products-section">
@@ -598,13 +599,13 @@ def build_product(cat_slug, cat_name, prod_slug, prod_name, brand, price, img_ke
     related_cards = ""
     for cs, ps, pn, br, pr, ik in related:
         related_cards += f"""
-        <a href="{cs}/{ps}.html" class="product-card">
+        <a href="{P}{cs}/{ps}.html" class="product-card">
             <div class="image-wrapper">{img_no_alt(ik)}</div>
             <div class="info"><div class="brand">{br}</div><h3>{pn}</h3><div class="price">{"" if pr == 0 else f"{pr},00 €"}</div></div>
         </a>"""
     # BUG: related 404
     related_cards += f"""
-    <a href="{cat_slug}/{random.choice(GHOST_PAGES)}.html" class="product-card">
+    <a href="{P}{cat_slug}/{random.choice(GHOST_PAGES)}.html" class="product-card">
         <div class="image-wrapper">{broken_img()}</div>
         <div class="info"><div class="brand">ARCHIVE</div><h3>Article Similaire</h3><div class="price">--,-- €</div></div>
     </a>"""
@@ -615,8 +616,8 @@ def build_product(cat_slug, cat_name, prod_slug, prod_name, brand, price, img_ke
     body = f"""
     <div class="container">
         <div class="breadcrumb">
-            <a href="index.html">Accueil</a> <span>›</span>
-            <a href="{cat_slug}/index.html">{cat_name}</a> <span>›</span> {prod_name}
+            <a href="{P}index.html">Accueil</a> <span>›</span>
+            <a href="{P}{cat_slug}/index.html">{cat_name}</a> <span>›</span> {prod_name}
         </div>
     </div>
     <section class="product-detail">
@@ -653,7 +654,7 @@ def build_blog_index():
     cards = ""
     for slug, title, cat, excerpt, img_key in BLOG_ARTICLES:
         cards += f"""
-        <a href="{slug}.html" class="blog-card">
+        <a href="{P}{slug}.html" class="blog-card">
             <div class="image-wrapper">{img_no_alt(img_key)}</div>
             <div class="content">
                 <div class="meta">{cat}</div>
@@ -664,7 +665,7 @@ def build_blog_index():
         </a>"""
     # 404 blog links
     cards += f"""
-    <a href="blog/article-supprime.html" class="blog-card">
+    <a href="{P}blog/article-supprime.html" class="blog-card">
         <div class="image-wrapper">{broken_img()}</div>
         <div class="content"><div class="meta">ARCHIVE</div><h3>Les Tendances Oubliées</h3><p>Cet article n'est plus disponible...</p></div>
     </a>"""
@@ -714,8 +715,8 @@ def build_blog_article(idx, slug, title, cat, excerpt, img_key):
                 {lorem()}
                 <h2>Nos Recommandations</h2>
                 {lorem()}
-                <p><a href="{random.choice(GHOST_PAGES)}.html">Découvrir nos sélections associées</a></p>
-                <p><a href="blog/{random.choice(GHOST_PAGES)}.html">Lire notre guide complémentaire</a></p>
+                <p><a href="{P}{random.choice(GHOST_PAGES)}.html">Découvrir nos sélections associées</a></p>
+                <p><a href="{P}blog/{random.choice(GHOST_PAGES)}.html">Lire notre guide complémentaire</a></p>
             </div>
         </div>
     </section>"""
@@ -746,7 +747,7 @@ def build_extra(idx, slug, title, img_key):
         </div>
     </section>
     <div class="container">
-        <div class="breadcrumb"><a href="index.html">Accueil</a> <span>›</span> {title}</div>
+        <div class="breadcrumb"><a href="{P}index.html">Accueil</a> <span>›</span> {title}</div>
     </div>
     <section class="products-section">
         <div class="container">
@@ -808,8 +809,6 @@ Disallow: /tmp/
 Disallow: /private/
 Disallow: /checkout/
 Disallow: /cart/
-
-Crawl-delay: 1
 
 Sitemap: {DOMAIN}/sitemap.xml
 """)

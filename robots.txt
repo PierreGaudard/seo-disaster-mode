@@ -8,6 +8,4 @@ Disallow: /private/
 Disallow: /checkout/
 Disallow: /cart/
 
-Crawl-delay: 1
-
 Sitemap: https://pierregaudard.github.io/seo-disaster-mode/sitemap.xml
