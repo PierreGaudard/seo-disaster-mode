@@ -3,57 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vêtements Homme - Collection ModeStyle Paris</title>
-    <meta name="description" content="Découvrez notre collection de vêtements homme. Les plus belles pièces de la mode parisienne.">
-    <link rel="canonical" href="https://www.modestyle-paris.fr/vetements-homme/index.html">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Vêtements Homme — Collection ModeStyle Paris</title>
+    <meta name="description" content="Mode masculine élégante et contemporaine.">
+    <link rel="canonical" href="https://pierregaudard.github.io/seo-disaster-mode/vetements-homme/index.html">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="top-bar">Livraison offerte dès 100€ d'achat — Retours gratuits sous 30 jours</div>
     
-    <nav>
-        <a href="/index.html">Accueil</a>
-        <a href="/robes/index.html">Robes</a>
-        <a href="/chaussures/index.html">Chaussures</a>
-        <a href="/accessoires/index.html">Accessoires</a>
-        <a href="/sacs-a-main/index.html">Sacs</a>
-        <a href="/bijoux/index.html">Bijoux</a>
-        <!-- BUG: lien en HTTP au lieu de HTTPS -->
-        <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
-        <a href="/tendances/index.html">Tendances</a>
-        <!-- BUG: lien vers page inexistante -->
-        <a href="/nouvelle-collection.html">Nouvelle Collection</a>
-        <a href="/blog/index.html">Blog</a>
-    </nav>
-    <main>
-        <h1>Collection Vêtements Homme</h1>
-        <img src="/images/robe_404.jpg">
-<img src="/assets/photo_inexistante.webp">
-
-        
-        <img src="https://picsum.photos/seed/fashion2/800/600">
-        <p>Le style n'a pas de prix. Retrouvez nos collections à des prix accessibles, sans compromis sur la qualité des matières et des finitions.</p>
-<p>La mode est un art de vivre. Chez ModeStyle Paris, nous croyons que chaque femme et chaque homme mérite de se sentir unique et élégant au quotidien.</p>
-        <h2>Nos Vêtements Homme</h2>
-        <ul><li><a href="/vetements-homme/costume-italien.html">Costume Italien</a></li>
-<li><a href="/vetements-homme/chemise-lin.html">Chemise en Lin</a></li>
-<li><a href="/vetements-homme/jean-slim-brut.html">Jean Slim Brut</a></li>
-<li><a href="/vetements-homme/veste-cuir-vintage.html">Veste Cuir Vintage</a></li>
-<li><a href="/vetements-homme/polo-coton-bio.html">Polo Coton Bio</a></li>
-<li><a href="/vetements-homme/produit-supprime-ancien.html">Article en Rupture</a></li>
-<li><a href="/vetements-homme/collection-archivee.html">Collection Archivée</a></li></ul>
-        
-        
-    </main>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">Mode<span>Style</span></a>
+            <nav>
+                <a href="robes/index.html">Robes</a>
+                <a href="chaussures/index.html">Chaussures</a>
+                <a href="accessoires/index.html">Accessoires</a>
+                <a href="sacs-a-main/index.html">Sacs</a>
+                <a href="bijoux/index.html">Bijoux</a>
+                <!-- BUG SEO: lien HTTP mixte -->
+                <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
+                <a href="tendances/index.html">Tendances</a>
+                <!-- BUG SEO: lien 404 -->
+                <a href="nouvelle-collection.html">Nouveau</a>
+                <a href="blog/index.html">Journal</a>
+            </nav>
+        </div>
+    </header>
     
-    <footer>
-        <p>&copy; 2025 ModeStyle Paris - Tous droits réservés</p>
-        <!-- BUG: liens vers pages 404 -->
-        <a href="/mentions-legales.html">Mentions Légales</a>
-        <a href="/cgv.html">CGV</a>
-        <a href="/soldes-hiver-2024.html">Offres Spéciales</a>
-        <a href="/plan-du-site.html">Plan du site</a>
-        <!-- BUG: lien externe cassé -->
-        <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+    <section class="page-header">
+        <img src="images/homme-costume.jpg" alt="Collection Vêtements Homme">
+        <div class="content">
+            <h1>Collection Vêtements Homme</h1>
+            <p>Mode masculine élégante et contemporaine.</p>
+        </div>
+    </section>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Accueil</a> <span>›</span> Vêtements Homme
+        </div>
+    </div>
+    <section class="products-section">
+        <div class="container">
+            <div class="products-grid">
+        <a href="vetements-homme/costume-italien.html" class="product-card">
+            <div class="image-wrapper"><img src="img/produit-ancien.jpg"></div>
+            <div class="info">
+                <div class="brand">SARTORIA ROMA</div>
+                <h3>Costume Italien Coupe Slim</h3>
+                <div class="price">599,00 €<span class="old-price">696,00 €</span></div>
+            </div>
+        </a>
+        <a href="vetements-homme/chemise-lin.html" class="product-card">
+            <div class="image-wrapper"><img src="images/homme-costume.jpg" alt="Chemise en Lin Blanc"><span class="badge">-30%</span></div>
+            <div class="info">
+                <div class="brand">MAISON PURE</div>
+                <h3>Chemise en Lin Blanc</h3>
+                <div class="price">89,00 €<span class="old-price">181,00 €</span></div>
+            </div>
+        </a>
+        <a href="vetements-homme/jean-slim-brut.html" class="product-card">
+            <div class="image-wrapper"><img src="images/tshirt-streetwear.jpg" alt="Jean Slim Brut Japonais"></div>
+            <div class="info">
+                <div class="brand">DENIM CRAFT</div>
+                <h3>Jean Slim Brut Japonais</h3>
+                <div class="price">149,00 €<span class="old-price">218,00 €</span></div>
+            </div>
+        </a>
+        <a href="vetements-homme/veste-cuir-vintage.html" class="product-card">
+            <div class="image-wrapper"><img src="images/mode-vintage.jpg" alt="Veste Cuir Vintage"></div>
+            <div class="info">
+                <div class="brand">HERITAGE LEATHER</div>
+                <h3>Veste Cuir Vintage</h3>
+                <div class="price">399,00 €</div>
+            </div>
+        </a>
+        <a href="vetements-homme/polo-coton-bio.html" class="product-card">
+            <div class="image-wrapper"><img src="images/tshirt-streetwear.jpg" alt="Polo Coton Bio"></div>
+            <div class="info">
+                <div class="brand">ÉCOMODE</div>
+                <h3>Polo Coton Bio</h3>
+                <div class="price">59,00 €</div>
+            </div>
+        </a>
+    <a href="vetements-homme/produit-supprime-ancien.html" class="product-card">
+        <div class="image-wrapper"><img src="images/collection/archive-2023.jpg"></div>
+        <div class="info"><div class="brand">ARCHIVE</div><h3>Article en Rupture</h3><div class="price">--,-- €</div></div>
+    </a>
+    <a href="vetements-homme/collection-archivee.html" class="product-card">
+        <div class="image-wrapper"><img src="images/homme-costume.jpg"></div>
+        <div class="info"><div class="brand">ARCHIVE</div><h3>Collection Archivée</h3><div class="price">--,-- €</div></div>
+    </a></div>
+        </div>
+    </section>
+    
+    <section class="newsletter">
+        <div class="container">
+            <h2>Restez Inspiré</h2>
+            <p>Inscrivez-vous à notre newsletter et recevez en avant-première nos nouveautés et conseils style.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Votre adresse email">
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4>ModeStyle Paris</h4>
+                    <p>Depuis 2018, ModeStyle Paris sélectionne les plus belles pièces de mode pour femmes et hommes exigeants. Notre passion : vous offrir le meilleur du style parisien.</p>
+                </div>
+                <div>
+                    <h4>Boutique</h4>
+                    <ul>
+                        <li><a href="robes/index.html">Robes</a></li>
+                        <li><a href="chaussures/index.html">Chaussures</a></li>
+                        <li><a href="sacs-a-main/index.html">Sacs à Main</a></li>
+                        <li><a href="bijoux/index.html">Bijoux</a></li>
+                        <!-- BUG SEO: 404 -->
+                        <li><a href="collection-limitee-ete.html">Offres Spéciales</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Informations</h4>
+                    <ul>
+                        <!-- BUG SEO: plusieurs 404 -->
+                        <li><a href="mentions-legales.html">Mentions Légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="plan-du-site.html">Plan du Site</a></li>
+                        <li><a href="guide/morphologie.html">Guide Morphologie</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>12 Rue du Faubourg Saint-Honoré</li>
+                        <li>75008 Paris, France</li>
+                        <li>contact@modestyle-paris.fr</li>
+                        <li>+33 1 42 68 00 00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 ModeStyle Paris — Tous droits réservés</span>
+                <!-- BUG SEO: lien externe cassé -->
+                <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

@@ -3,53 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Mode - ModeStyle Paris</title>
-    <meta name="description" content="Découvrez notre collection de mode tendance. Livraison gratuite dès 50€ d'achat. Retours sous 30 jours.">
-    <link rel="canonical" href="https://www.modestyle-paris.fr/blog/index.html">
-    <link rel="stylesheet" href="/css/style.css">
+    <title>Blog Mode — ModeStyle Paris</title>
+    <meta name="description" content="Découvrez notre collection de mode tendance. Livraison gratuite dès 50€. Retours sous 30 jours.">
+    <link rel="canonical" href="https://pierregaudard.github.io/seo-disaster-mode/blog/index.html">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+    <div class="top-bar">Livraison offerte dès 100€ d'achat — Retours gratuits sous 30 jours</div>
     
-    <nav>
-        <a href="/index.html">Accueil</a>
-        <a href="/robes/index.html">Robes</a>
-        <a href="/chaussures/index.html">Chaussures</a>
-        <a href="/accessoires/index.html">Accessoires</a>
-        <a href="/sacs-a-main/index.html">Sacs</a>
-        <a href="/bijoux/index.html">Bijoux</a>
-        <!-- BUG: lien en HTTP au lieu de HTTPS -->
-        <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
-        <a href="/tendances/index.html">Tendances</a>
-        <!-- BUG: lien vers page inexistante -->
-        <a href="/nouvelle-collection.html">Nouvelle Collection</a>
-        <a href="/blog/index.html">Blog</a>
-    </nav>
-    <main>
-        <h1>Notre Blog Mode</h1>
-        <img src="https://picsum.photos/seed/mode2/800/600">
-<img src="https://picsum.photos/seed/fashion1/800/600">
-
-        
-    <img src="https://picsum.photos/seed/mode3/800/600">
-    <p>Retrouvez tous nos articles mode, conseils style et actualités fashion.</p>
-    <ul>
-    <li><a href="/blog/comment-porter-le-velours.html">Comment porter le velours cet hiver</a></li><li><a href="/blog/top-10-sacs-iconiques.html">Top 10 des Sacs Iconiques</a></li><li><a href="/blog/guide-tailles-international.html">Guide des Tailles International</a></li><li><a href="/blog/entretien-cuir.html">Comment Entretenir vos Articles en Cuir</a></li><li><a href="/blog/histoire-haute-couture.html">L'Histoire de la Haute Couture</a></li><li><a href="/blog/mode-annees-90.html">Le Retour de la Mode des Années 90</a></li><li><a href="/blog/capsule-wardrobe.html">Créer une Garde-Robe Capsule</a></li><li><a href="/blog/fashion-week-recap.html">Fashion Week : Le Récap Complet</a></li><li><a href="/blog/mode-ethique-guide.html">Guide Complet de la Mode Éthique</a></li><li><a href="/blog/accessoiriser-tenue.html">Comment Accessoiriser sa Tenue</a></li>
-    <li><a href="/blog/article-supprime.html">Les Tendances Oubliées</a></li>
-    <li><a href="/blog/guide-perdu.html">Guide Disparu</a></li>
-    </ul>
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">Mode<span>Style</span></a>
+            <nav>
+                <a href="robes/index.html">Robes</a>
+                <a href="chaussures/index.html">Chaussures</a>
+                <a href="accessoires/index.html">Accessoires</a>
+                <a href="sacs-a-main/index.html">Sacs</a>
+                <a href="bijoux/index.html">Bijoux</a>
+                <!-- BUG SEO: lien HTTP mixte -->
+                <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
+                <a href="tendances/index.html">Tendances</a>
+                <!-- BUG SEO: lien 404 -->
+                <a href="nouvelle-collection.html">Nouveau</a>
+                <a href="blog/index.html">Journal</a>
+            </nav>
+        </div>
+    </header>
     
-        
-    </main>
+    <section class="page-header">
+        <img src="images/defile-runway.jpg">
+        <div class="content"><h1>Le Journal Mode</h1><p>Tendances, guides et inspirations par nos experts</p></div>
+    </section>
+    <section class="blog-section">
+        <div class="container">
+            <div class="blog-grid">
+        <a href="blog/comment-porter-le-velours.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/mannequin-hiver.jpg"></div>
+            <div class="content">
+                <div class="meta">TENDANCES</div>
+                <h3>Comment Porter le Velours cet Hiver</h3>
+                <p>Le velours fait son grand retour sur les podiums. Découvrez comment intégrer cette matière noble dans vos tenues quotidiennes sans faux pas....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/top-10-sacs-iconiques.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/sac-main-luxe.jpg"></div>
+            <div class="content">
+                <div class="meta">CULTURE MODE</div>
+                <h3>Top 10 des Sacs les Plus Iconiques de l'Histoire</h3>
+                <p>Du Birkin d'Hermès au 2.55 de Chanel, retour sur les sacs qui ont marqué l'histoire de la mode....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/guide-tailles-international.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/vetements-rack.jpg"></div>
+            <div class="content">
+                <div class="meta">GUIDES</div>
+                <h3>Guide des Tailles International : Ne Vous Trompez Plus</h3>
+                <p>Fini les erreurs de taille lors de vos achats en ligne. Notre guide complet pour convertir toutes les tailles....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/entretien-cuir.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/sac-main-luxe.jpg"></div>
+            <div class="content">
+                <div class="meta">ENTRETIEN</div>
+                <h3>L'Art d'Entretenir vos Articles en Cuir</h3>
+                <p>Le cuir est un investissement. Apprenez les gestes essentiels pour préserver vos pièces en cuir pendant des années....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/histoire-haute-couture.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/defile-mode.jpg"></div>
+            <div class="content">
+                <div class="meta">CULTURE MODE</div>
+                <h3>L'Histoire Fascinante de la Haute Couture Française</h3>
+                <p>De Worth à aujourd'hui, plongez dans l'histoire de la haute couture qui a fait de Paris la capitale mondiale de la mode....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/mode-annees-90.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/mode-vintage.jpg"></div>
+            <div class="content">
+                <div class="meta">TENDANCES</div>
+                <h3>Le Grand Retour de la Mode des Années 90</h3>
+                <p>Jeans taille haute, crop tops et plateformes : les années 90 n'ont jamais été aussi actuelles....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/capsule-wardrobe.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/vetements-rack.jpg"></div>
+            <div class="content">
+                <div class="meta">GUIDES</div>
+                <h3>Créer sa Garde-Robe Capsule en 30 Pièces</h3>
+                <p>Moins c'est plus. Découvrez comment composer une garde-robe minimaliste mais infiniment versatile....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/fashion-week-recap.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/defile-runway.jpg"></div>
+            <div class="content">
+                <div class="meta">ÉVÉNEMENTS</div>
+                <h3>Fashion Week Paris : Le Récap Complet des Défilés</h3>
+                <p>Toutes les tendances, les moments forts et les collections qui ont marqué cette Fashion Week parisienne....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/mode-ethique-guide.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/mode-vintage.jpg"></div>
+            <div class="content">
+                <div class="meta">ÉCOMODE</div>
+                <h3>Mode Éthique : Le Guide Complet pour Consommer Responsable</h3>
+                <p>Comment concilier style et éthique ? Nos conseils pour une garde-robe responsable sans compromis sur le style....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+        <a href="blog/accessoiriser-tenue.html" class="blog-card">
+            <div class="image-wrapper"><img src="images/accessoires-femme.jpg"></div>
+            <div class="content">
+                <div class="meta">STYLE</div>
+                <h3>L'Art d'Accessoiriser : 10 Règles d'Or</h3>
+                <p>Les accessoires font la différence. Maîtrisez l'art de l'accessoirisation avec nos 10 commandements mode....</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>
+    <a href="blog/article-supprime.html" class="blog-card">
+        <div class="image-wrapper"><img src="uploads/old-collection.png"></div>
+        <div class="content"><div class="meta">ARCHIVE</div><h3>Les Tendances Oubliées</h3><p>Cet article n'est plus disponible...</p></div>
+    </a></div>
+        </div>
+    </section>
     
-    <footer>
-        <p>&copy; 2025 ModeStyle Paris - Tous droits réservés</p>
-        <!-- BUG: liens vers pages 404 -->
-        <a href="/mentions-legales.html">Mentions Légales</a>
-        <a href="/cgv.html">CGV</a>
-        <a href="/ancien-catalogue.html">Offres Spéciales</a>
-        <a href="/plan-du-site.html">Plan du site</a>
-        <!-- BUG: lien externe cassé -->
-        <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+    <section class="newsletter">
+        <div class="container">
+            <h2>Restez Inspiré</h2>
+            <p>Inscrivez-vous à notre newsletter et recevez en avant-première nos nouveautés et conseils style.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Votre adresse email">
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4>ModeStyle Paris</h4>
+                    <p>Depuis 2018, ModeStyle Paris sélectionne les plus belles pièces de mode pour femmes et hommes exigeants. Notre passion : vous offrir le meilleur du style parisien.</p>
+                </div>
+                <div>
+                    <h4>Boutique</h4>
+                    <ul>
+                        <li><a href="robes/index.html">Robes</a></li>
+                        <li><a href="chaussures/index.html">Chaussures</a></li>
+                        <li><a href="sacs-a-main/index.html">Sacs à Main</a></li>
+                        <li><a href="bijoux/index.html">Bijoux</a></li>
+                        <!-- BUG SEO: 404 -->
+                        <li><a href="collection-limitee-ete.html">Offres Spéciales</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Informations</h4>
+                    <ul>
+                        <!-- BUG SEO: plusieurs 404 -->
+                        <li><a href="mentions-legales.html">Mentions Légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="plan-du-site.html">Plan du Site</a></li>
+                        <li><a href="guide/morphologie.html">Guide Morphologie</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>12 Rue du Faubourg Saint-Honoré</li>
+                        <li>75008 Paris, France</li>
+                        <li>contact@modestyle-paris.fr</li>
+                        <li>+33 1 42 68 00 00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 ModeStyle Paris — Tous droits réservés</span>
+                <!-- BUG SEO: lien externe cassé -->
+                <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+            </div>
+        </div>
     </footer>
 </body>
 </html>

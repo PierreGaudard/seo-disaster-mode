@@ -1,649 +1,836 @@
 #!/usr/bin/env python3
-"""Generate a deliberately broken SEO fashion website with 100 pages."""
+"""Generate a deliberately broken SEO fashion website with 100 pages — v2 with real design."""
 
-import os
-import random
-import datetime
+import os, random, datetime
 
-DOMAIN = "https://www.modestyle-paris.fr"
-OUTPUT_DIR = os.path.dirname(os.path.abspath(__file__))
+DOMAIN = "https://pierregaudard.github.io/seo-disaster-mode"
+BASE = os.path.dirname(os.path.abspath(__file__))
+random.seed(42)
 
-# ─── Fashion content data ───────────────────────────────────────────
+# ═══════════════════════════════════════════════════════
+# DATA
+# ═══════════════════════════════════════════════════════
+
+# Image mapping (real downloaded images)
+IMG = {
+    "hero": "images/hero-fashion.jpg",
+    "robe": "images/robe-elegante.jpg",
+    "mannequin": "images/mannequin-studio.jpg",
+    "defile": "images/defile-mode.jpg",
+    "boutique": "images/boutique-luxe.jpg",
+    "shopping": "images/shopping-mode.jpg",
+    "rack": "images/vetements-rack.jpg",
+    "rue": "images/mannequin-rue.jpg",
+    "blanche": "images/robe-blanche.jpg",
+    "coloree": "images/mannequin-coloree.jpg",
+    "accessoires": "images/accessoires-luxe.jpg",
+    "bijoux": "images/bijoux-or.jpg",
+    "chaussures": "images/chaussures-sport.jpg",
+    "sneakers": "images/sneakers-rouge.jpg",
+    "baskets": "images/baskets-running.jpg",
+    "sac": "images/sac-main-luxe.jpg",
+    "tshirt": "images/tshirt-streetwear.jpg",
+    "maquillage": "images/maquillage-pro.jpg",
+    "lunettes": "images/lunettes-soleil.jpg",
+    "parfum": "images/parfum-luxe.jpg",
+    "hiver": "images/mannequin-hiver.jpg",
+    "soiree": "images/mannequin-soiree.jpg",
+    "lingerie": "images/lingerie-fine.jpg",
+    "naturel": "images/maquillage-naturel.jpg",
+    "ete": "images/robe-ete.jpg",
+    "homme": "images/homme-costume.jpg",
+    "interieur": "images/interieur-boutique.jpg",
+    "runway": "images/defile-runway.jpg",
+    "femme": "images/accessoires-femme.jpg",
+    "vintage": "images/mode-vintage.jpg",
+}
+
+# Broken image paths (404)
+BROKEN_IMG = [
+    "images/robe_supprimee_404.jpg",
+    "images/photo-manquante.png",
+    "img/produit-ancien.jpg",
+    "assets/visuel-erreur.webp",
+    "media/image-corrompue.jpg",
+    "uploads/old-collection.png",
+    "static/img/broken-photo.jpg",
+    "images/collection/archive-2023.jpg",
+]
 
 CATEGORIES = [
-    ("robes", "Robes"),
-    ("chaussures", "Chaussures"),
-    ("accessoires", "Accessoires"),
-    ("sacs-a-main", "Sacs à Main"),
-    ("bijoux", "Bijoux"),
-    ("maquillage", "Maquillage"),
-    ("tendances", "Tendances"),
-    ("designers", "Designers"),
-    ("vetements-homme", "Vêtements Homme"),
-    ("lingerie", "Lingerie"),
+    ("robes", "Robes", "robe", "Découvrez notre collection exclusive de robes pour toutes les occasions."),
+    ("chaussures", "Chaussures", "chaussures", "Les plus belles chaussures des créateurs parisiens et internationaux."),
+    ("accessoires", "Accessoires", "accessoires", "Complétez votre look avec nos accessoires soigneusement sélectionnés."),
+    ("sacs-a-main", "Sacs à Main", "sac", "Sacs à main de luxe, pochettes et cabas pour sublimer votre style."),
+    ("bijoux", "Bijoux", "bijoux", "Bijoux fins et précieux pour toutes les femmes élégantes."),
+    ("maquillage", "Maquillage", "maquillage", "Sublimez votre beauté avec notre sélection maquillage premium."),
+    ("tendances", "Tendances", "runway", "Les tendances mode du moment décryptées par nos stylistes."),
+    ("designers", "Designers", "defile", "Les grands noms de la mode française et internationale."),
+    ("vetements-homme", "Vêtements Homme", "homme", "Mode masculine élégante et contemporaine."),
+    ("lingerie", "Lingerie", "lingerie", "Lingerie fine et confortable pour se sentir belle au quotidien."),
 ]
 
 PRODUCTS = {
     "robes": [
-        ("robe-soiree-noire", "Robe de Soirée Noire"),
-        ("robe-ete-fleurie", "Robe Été Fleurie"),
-        ("robe-cocktail-rouge", "Robe Cocktail Rouge"),
-        ("robe-maxi-boheme", "Robe Maxi Bohème"),
-        ("robe-courte-blanche", "Robe Courte Blanche"),
-        ("robe-dentelle-ivoire", "Robe Dentelle Ivoire"),
+        ("robe-soiree-noire", "Robe de Soirée Noire", "MAISON ÉLÉGANCE", 289, "robe"),
+        ("robe-ete-fleurie", "Robe Été Fleurie", "JARDIN PARISIEN", 159, "ete"),
+        ("robe-cocktail-rouge", "Robe Cocktail Rouge", "ATELIER ROUGE", 349, "coloree"),
+        ("robe-maxi-boheme", "Robe Maxi Bohème", "LIBRE & BELLE", 199, "blanche"),
+        ("robe-courte-blanche", "Robe Courte Blanche", "MAISON PURE", 129, "blanche"),
+        ("robe-dentelle-ivoire", "Robe Dentelle Ivoire", "HÉRITAGE PARIS", 459, "robe"),
     ],
     "chaussures": [
-        ("escarpins-noirs", "Escarpins Noirs"),
-        ("baskets-blanches", "Baskets Blanches"),
-        ("sandales-ete", "Sandales Été"),
-        ("bottes-cuir", "Bottes en Cuir"),
-        ("mocassins-velours", "Mocassins Velours"),
-        ("talons-aiguilles-rouges", "Talons Aiguilles Rouges"),
+        ("escarpins-noirs", "Escarpins Noirs Classiques", "TALONS PARIS", 189, "chaussures"),
+        ("baskets-blanches", "Baskets Blanches Minimalistes", "URBAN WALK", 129, "sneakers"),
+        ("sandales-ete", "Sandales Été Dorées", "SOLEIL D'OR", 99, "baskets"),
+        ("bottes-cuir", "Bottes en Cuir Italien", "BOTTEGA STILE", 349, "chaussures"),
+        ("mocassins-velours", "Mocassins Velours Bordeaux", "VELVET STEP", 159, "baskets"),
+        ("talons-aiguilles-rouges", "Talons Aiguilles Rouges", "ATELIER ROUGE", 229, "chaussures"),
     ],
     "accessoires": [
-        ("lunettes-soleil-aviateur", "Lunettes de Soleil Aviateur"),
-        ("echarpe-cachemire", "Écharpe en Cachemire"),
-        ("ceinture-cuir-italien", "Ceinture Cuir Italien"),
-        ("chapeau-fedora", "Chapeau Fedora"),
-        ("gants-soie", "Gants en Soie"),
+        ("lunettes-soleil-aviateur", "Lunettes Aviateur Or", "VISION LUXE", 199, "lunettes"),
+        ("echarpe-cachemire", "Écharpe Cachemire Gris", "DOUCEUR PARIS", 149, "accessoires"),
+        ("ceinture-cuir-italien", "Ceinture Cuir Italien", "BOTTEGA STILE", 89, "accessoires"),
+        ("chapeau-fedora", "Chapeau Fedora Noir", "CHAPELIER PARISIEN", 119, "vintage"),
+        ("gants-soie", "Gants en Soie Ivoire", "HÉRITAGE PARIS", 79, "femme"),
     ],
     "sacs-a-main": [
-        ("sac-cuir-noir", "Sac en Cuir Noir"),
-        ("pochette-soiree", "Pochette de Soirée"),
-        ("sac-bandouliere", "Sac Bandoulière"),
-        ("cabas-plage", "Cabas de Plage"),
-        ("sac-voyage-luxe", "Sac de Voyage Luxe"),
+        ("sac-cuir-noir", "Sac Cuir Noir Intemporel", "MAISON ÉLÉGANCE", 489, "sac"),
+        ("pochette-soiree", "Pochette de Soirée Dorée", "SOLEIL D'OR", 199, "sac"),
+        ("sac-bandouliere", "Sac Bandoulière Camel", "URBAN WALK", 259, "sac"),
+        ("cabas-plage", "Cabas de Plage Naturel", "LIBRE & BELLE", 79, "sac"),
+        ("sac-voyage-luxe", "Sac de Voyage en Cuir", "BOTTEGA STILE", 599, "sac"),
     ],
     "bijoux": [
-        ("collier-or-18k", "Collier Or 18K"),
-        ("boucles-oreilles-perles", "Boucles d'Oreilles Perles"),
-        ("bracelet-argent", "Bracelet Argent"),
-        ("bague-diamant", "Bague Diamant"),
+        ("collier-or-18k", "Collier Or 18 Carats", "JOAILLERIE ÉTOILE", 899, "bijoux"),
+        ("boucles-oreilles-perles", "Boucles d'Oreilles Perles", "PERLES DU SUD", 249, "bijoux"),
+        ("bracelet-argent", "Bracelet Argent Massif", "ARGENT NOBLE", 159, "bijoux"),
+        ("bague-diamant", "Bague Diamant Solitaire", "JOAILLERIE ÉTOILE", 1299, "bijoux"),
     ],
     "maquillage": [
-        ("rouge-levres-mat", "Rouge à Lèvres Mat"),
-        ("fond-teint-naturel", "Fond de Teint Naturel"),
-        ("mascara-volume", "Mascara Volume"),
-        ("palette-fards", "Palette de Fards"),
+        ("rouge-levres-mat", "Rouge à Lèvres Mat Velours", "BEAUTÉ PARISIENNE", 39, "maquillage"),
+        ("fond-teint-naturel", "Fond de Teint Naturel", "PEAU DOUCE", 49, "naturel"),
+        ("mascara-volume", "Mascara Volume Extrême", "REGARD INTENSE", 29, "maquillage"),
+        ("palette-fards", "Palette Fards à Paupières", "BEAUTÉ PARISIENNE", 59, "maquillage"),
     ],
     "tendances": [
-        ("tendances-printemps-2025", "Tendances Printemps 2025"),
-        ("tendances-automne-hiver", "Tendances Automne-Hiver"),
-        ("couleurs-saison", "Les Couleurs de la Saison"),
-        ("mode-durable", "Mode Durable et Écoresponsable"),
+        ("tendances-printemps-2025", "Tendances Printemps 2025", "MODESTYLE", 0, "runway"),
+        ("tendances-automne-hiver", "Tendances Automne-Hiver", "MODESTYLE", 0, "hiver"),
+        ("couleurs-saison", "Les Couleurs de la Saison", "MODESTYLE", 0, "coloree"),
+        ("mode-durable", "Mode Durable et Écoresponsable", "MODESTYLE", 0, "vintage"),
     ],
     "designers": [
-        ("jean-paul-gaultier", "Jean-Paul Gaultier"),
-        ("coco-chanel-heritage", "Coco Chanel : L'Héritage"),
-        ("alexander-mcqueen", "Alexander McQueen"),
-        ("yves-saint-laurent", "Yves Saint Laurent"),
+        ("jean-paul-gaultier", "Jean-Paul Gaultier", "JPG", 0, "defile"),
+        ("coco-chanel-heritage", "Coco Chanel : L'Héritage", "CHANEL", 0, "boutique"),
+        ("alexander-mcqueen", "Alexander McQueen", "MCQUEEN", 0, "runway"),
+        ("yves-saint-laurent", "Yves Saint Laurent", "YSL", 0, "mannequin"),
     ],
     "vetements-homme": [
-        ("costume-italien", "Costume Italien"),
-        ("chemise-lin", "Chemise en Lin"),
-        ("jean-slim-brut", "Jean Slim Brut"),
-        ("veste-cuir-vintage", "Veste Cuir Vintage"),
-        ("polo-coton-bio", "Polo Coton Bio"),
+        ("costume-italien", "Costume Italien Coupe Slim", "SARTORIA ROMA", 599, "homme"),
+        ("chemise-lin", "Chemise en Lin Blanc", "MAISON PURE", 89, "homme"),
+        ("jean-slim-brut", "Jean Slim Brut Japonais", "DENIM CRAFT", 149, "tshirt"),
+        ("veste-cuir-vintage", "Veste Cuir Vintage", "HERITAGE LEATHER", 399, "vintage"),
+        ("polo-coton-bio", "Polo Coton Bio", "ÉCOMODE", 59, "tshirt"),
     ],
     "lingerie": [
-        ("ensemble-dentelle", "Ensemble Dentelle"),
-        ("nuisette-soie", "Nuisette en Soie"),
-        ("body-sculptant", "Body Sculptant"),
-        ("pyjama-satin", "Pyjama Satin"),
+        ("ensemble-dentelle", "Ensemble Dentelle Française", "INTIME PARIS", 129, "lingerie"),
+        ("nuisette-soie", "Nuisette en Soie Rose", "DOUCEUR DE NUIT", 89, "soiree"),
+        ("body-sculptant", "Body Sculptant Seconde Peau", "SILHOUETTE", 69, "lingerie"),
+        ("pyjama-satin", "Pyjama Satin Champagne", "DOUCEUR DE NUIT", 109, "soiree"),
     ],
 }
 
 BLOG_ARTICLES = [
-    ("blog/comment-porter-le-velours", "Comment porter le velours cet hiver"),
-    ("blog/top-10-sacs-iconiques", "Top 10 des Sacs Iconiques"),
-    ("blog/guide-tailles-international", "Guide des Tailles International"),
-    ("blog/entretien-cuir", "Comment Entretenir vos Articles en Cuir"),
-    ("blog/histoire-haute-couture", "L'Histoire de la Haute Couture"),
-    ("blog/mode-annees-90", "Le Retour de la Mode des Années 90"),
-    ("blog/capsule-wardrobe", "Créer une Garde-Robe Capsule"),
-    ("blog/fashion-week-recap", "Fashion Week : Le Récap Complet"),
-    ("blog/mode-ethique-guide", "Guide Complet de la Mode Éthique"),
-    ("blog/accessoiriser-tenue", "Comment Accessoiriser sa Tenue"),
+    ("blog/comment-porter-le-velours", "Comment Porter le Velours cet Hiver", "TENDANCES", "Le velours fait son grand retour sur les podiums. Découvrez comment intégrer cette matière noble dans vos tenues quotidiennes sans faux pas.", "hiver"),
+    ("blog/top-10-sacs-iconiques", "Top 10 des Sacs les Plus Iconiques de l'Histoire", "CULTURE MODE", "Du Birkin d'Hermès au 2.55 de Chanel, retour sur les sacs qui ont marqué l'histoire de la mode.", "sac"),
+    ("blog/guide-tailles-international", "Guide des Tailles International : Ne Vous Trompez Plus", "GUIDES", "Fini les erreurs de taille lors de vos achats en ligne. Notre guide complet pour convertir toutes les tailles.", "rack"),
+    ("blog/entretien-cuir", "L'Art d'Entretenir vos Articles en Cuir", "ENTRETIEN", "Le cuir est un investissement. Apprenez les gestes essentiels pour préserver vos pièces en cuir pendant des années.", "sac"),
+    ("blog/histoire-haute-couture", "L'Histoire Fascinante de la Haute Couture Française", "CULTURE MODE", "De Worth à aujourd'hui, plongez dans l'histoire de la haute couture qui a fait de Paris la capitale mondiale de la mode.", "defile"),
+    ("blog/mode-annees-90", "Le Grand Retour de la Mode des Années 90", "TENDANCES", "Jeans taille haute, crop tops et plateformes : les années 90 n'ont jamais été aussi actuelles.", "vintage"),
+    ("blog/capsule-wardrobe", "Créer sa Garde-Robe Capsule en 30 Pièces", "GUIDES", "Moins c'est plus. Découvrez comment composer une garde-robe minimaliste mais infiniment versatile.", "rack"),
+    ("blog/fashion-week-recap", "Fashion Week Paris : Le Récap Complet des Défilés", "ÉVÉNEMENTS", "Toutes les tendances, les moments forts et les collections qui ont marqué cette Fashion Week parisienne.", "runway"),
+    ("blog/mode-ethique-guide", "Mode Éthique : Le Guide Complet pour Consommer Responsable", "ÉCOMODE", "Comment concilier style et éthique ? Nos conseils pour une garde-robe responsable sans compromis sur le style.", "vintage"),
+    ("blog/accessoiriser-tenue", "L'Art d'Accessoiriser : 10 Règles d'Or", "STYLE", "Les accessoires font la différence. Maîtrisez l'art de l'accessoirisation avec nos 10 commandements mode.", "femme"),
 ]
 
-# Pages that will NOT exist (404 targets)
+EXTRA_PAGES = [
+    ("promo/ete-2025", "Promotions Été 2025", "shopping"),
+    ("promo/hiver-2025", "Promotions Hiver 2025", "hiver"),
+    ("promo/black-friday", "Black Friday Mode", "rack"),
+    ("promo/soldes-finales", "Soldes Finales", "boutique"),
+    ("guide/morphologie", "Guide Morphologie", "mannequin"),
+    ("guide/couleurs-peau", "Quelles Couleurs pour Ma Peau", "maquillage"),
+    ("guide/dress-code-bureau", "Dress Code Bureau", "homme"),
+    ("guide/mode-grande-taille", "Mode Grande Taille", "rue"),
+    ("guide/style-minimaliste", "Le Style Minimaliste", "blanche"),
+    ("inspiration/look-casual", "Look Casual Chic", "rue"),
+    ("inspiration/look-soiree", "Look Soirée Glamour", "soiree"),
+    ("inspiration/look-bureau", "Look Bureau Tendance", "homme"),
+    ("inspiration/look-weekend", "Look Weekend Décontracté", "ete"),
+    ("inspiration/look-vacances", "Look Vacances Été", "ete"),
+    ("marques/chanel", "Chanel — Nos Sélections", "boutique"),
+    ("marques/dior", "Dior — Nos Sélections", "defile"),
+    ("marques/louis-vuitton", "Louis Vuitton — Nos Sélections", "sac"),
+    ("marques/hermes", "Hermès — Nos Sélections", "accessoires"),
+    ("marques/prada", "Prada — Nos Sélections", "mannequin"),
+    ("marques/gucci", "Gucci — Nos Sélections", "coloree"),
+    ("marques/balenciaga", "Balenciaga — Nos Sélections", "sneakers"),
+    ("marques/valentino", "Valentino — Nos Sélections", "robe"),
+    ("collections/printemps-2025", "Collection Printemps 2025", "ete"),
+    ("collections/ete-2025", "Collection Été 2025", "shopping"),
+    ("collections/automne-2025", "Collection Automne 2025", "hiver"),
+    ("collections/hiver-2025", "Collection Hiver 2025", "hiver"),
+    ("guide/entretien-soie", "Entretien de la Soie", "lingerie"),
+    ("guide/choisir-parfum", "Comment Choisir son Parfum", "parfum"),
+    ("inspiration/look-festival", "Look Festival", "coloree"),
+    ("inspiration/look-mariage", "Look Invitée Mariage", "blanche"),
+]
+
 GHOST_PAGES = [
-    "soldes-hiver-2024",
-    "collection-limitee-ete",
-    "lookbook-printemps",
-    "nouvelle-collection",
-    "partenariat-exclusif",
-    "vente-privee",
-    "page-supprimee",
-    "ancien-catalogue",
-    "promo-flash",
-    "collaboration-designer",
-    "offre-speciale-noel",
-    "black-friday-mode",
+    "soldes-hiver-2024", "collection-limitee-ete", "lookbook-printemps",
+    "nouvelle-collection", "partenariat-exclusif", "vente-privee",
+    "page-supprimee", "ancien-catalogue", "promo-flash",
+    "collaboration-designer", "offre-speciale-noel", "black-friday-mode",
 ]
-
-# Broken image URLs
-BROKEN_IMAGES = [
-    "images/robe_404.jpg",
-    "images/chaussure_manquante.png",
-    "img/produit-supprime.jpg",
-    "assets/photo_inexistante.webp",
-    "media/image-corrompue.jpg",
-    "uploads/ancien-visuel.png",
-    "static/img/404-fashion.jpg",
-    "images/collection/old-photo.jpg",
-]
-
-# Real placeholder images (from picsum)
-REAL_IMAGES = [
-    "https://picsum.photos/seed/mode1/800/600",
-    "https://picsum.photos/seed/mode2/800/600",
-    "https://picsum.photos/seed/mode3/800/600",
-    "https://picsum.photos/seed/fashion1/800/600",
-    "https://picsum.photos/seed/fashion2/800/600",
-]
-
-# ─── SEO Problem Templates ─────────────────────────────────────────
 
 DUPLICATE_TITLES = [
-    "Mode & Style - Votre Boutique en Ligne",
-    "Mode & Style - Votre Boutique en Ligne",
+    "Mode &amp; Style — Votre Boutique en Ligne",
     "Découvrez nos Collections | ModeStyle Paris",
-    "Découvrez nos Collections | ModeStyle Paris",
-    "Achetez en Ligne - Mode Femme & Homme",
-    "Achetez en Ligne - Mode Femme & Homme",
+    "Achetez en Ligne — Mode Femme &amp; Homme",
 ]
 
-DUPLICATE_META_DESC = "Découvrez notre collection de mode tendance. Livraison gratuite dès 50€ d'achat. Retours sous 30 jours."
+DUPLICATE_META = "Découvrez notre collection de mode tendance. Livraison gratuite dès 50€. Retours sous 30 jours."
+LONG_TITLE = "Découvrez Notre Incroyable Collection de Mode Printemps-Été 2025 avec des Réductions Exceptionnelles et une Livraison Gratuite pour Tous les Articles de Notre Catalogue en Ligne — ModeStyle Paris France Boutique Officielle"
 
-VERY_LONG_TITLE = "Découvrez Notre Incroyable Collection de Mode Printemps-Été 2025 avec des Réductions Exceptionnelles et une Livraison Gratuite pour Tous les Articles de Notre Catalogue en Ligne - ModeStyle Paris France Boutique Officielle"
+all_pages = []
 
-# ─── Helper functions ───────────────────────────────────────────────
+# ═══════════════════════════════════════════════════════
+# COMPONENT TEMPLATES
+# ═══════════════════════════════════════════════════════
 
-random.seed(42)
+def img_path(key):
+    return IMG.get(key, IMG["hero"])
 
-all_pages = []  # collect (path, title) for sitemap
+def broken_img():
+    return f'<img src="{random.choice(BROKEN_IMG)}">'
 
-def nav_html():
-    return """
-    <nav>
-        <a href="/index.html">Accueil</a>
-        <a href="/robes/index.html">Robes</a>
-        <a href="/chaussures/index.html">Chaussures</a>
-        <a href="/accessoires/index.html">Accessoires</a>
-        <a href="/sacs-a-main/index.html">Sacs</a>
-        <a href="/bijoux/index.html">Bijoux</a>
-        <!-- BUG: lien en HTTP au lieu de HTTPS -->
-        <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
-        <a href="/tendances/index.html">Tendances</a>
-        <!-- BUG: lien vers page inexistante -->
-        <a href="/nouvelle-collection.html">Nouvelle Collection</a>
-        <a href="/blog/index.html">Blog</a>
-    </nav>"""
+def img_no_alt(key="hero"):
+    return f'<img src="{img_path(key)}">'
+
+def img_ok(key="hero", alt="Photo de mode"):
+    return f'<img src="{img_path(key)}" alt="{alt}">'
+
+def top_bar():
+    return '<div class="top-bar">Livraison offerte dès 100€ d\'achat — Retours gratuits sous 30 jours</div>'
+
+def header_html():
+    return f"""
+    <header class="header">
+        <div class="container">
+            <a href="index.html" class="logo">Mode<span>Style</span></a>
+            <nav>
+                <a href="robes/index.html">Robes</a>
+                <a href="chaussures/index.html">Chaussures</a>
+                <a href="accessoires/index.html">Accessoires</a>
+                <a href="sacs-a-main/index.html">Sacs</a>
+                <a href="bijoux/index.html">Bijoux</a>
+                <!-- BUG SEO: lien HTTP mixte -->
+                <a href="http://www.modestyle-paris.fr/maquillage/index.html">Maquillage</a>
+                <a href="tendances/index.html">Tendances</a>
+                <!-- BUG SEO: lien 404 -->
+                <a href="nouvelle-collection.html">Nouveau</a>
+                <a href="blog/index.html">Journal</a>
+            </nav>
+        </div>
+    </header>"""
 
 def footer_html():
+    ghost = random.choice(GHOST_PAGES)
     return f"""
-    <footer>
-        <p>&copy; 2025 ModeStyle Paris - Tous droits réservés</p>
-        <!-- BUG: liens vers pages 404 -->
-        <a href="/mentions-legales.html">Mentions Légales</a>
-        <a href="/cgv.html">CGV</a>
-        <a href="/{random.choice(GHOST_PAGES)}.html">Offres Spéciales</a>
-        <a href="/plan-du-site.html">Plan du site</a>
-        <!-- BUG: lien externe cassé -->
-        <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+    <section class="newsletter">
+        <div class="container">
+            <h2>Restez Inspiré</h2>
+            <p>Inscrivez-vous à notre newsletter et recevez en avant-première nos nouveautés et conseils style.</p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Votre adresse email">
+                <button type="submit">S'inscrire</button>
+            </form>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h4>ModeStyle Paris</h4>
+                    <p>Depuis 2018, ModeStyle Paris sélectionne les plus belles pièces de mode pour femmes et hommes exigeants. Notre passion : vous offrir le meilleur du style parisien.</p>
+                </div>
+                <div>
+                    <h4>Boutique</h4>
+                    <ul>
+                        <li><a href="robes/index.html">Robes</a></li>
+                        <li><a href="chaussures/index.html">Chaussures</a></li>
+                        <li><a href="sacs-a-main/index.html">Sacs à Main</a></li>
+                        <li><a href="bijoux/index.html">Bijoux</a></li>
+                        <!-- BUG SEO: 404 -->
+                        <li><a href="{ghost}.html">Offres Spéciales</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Informations</h4>
+                    <ul>
+                        <!-- BUG SEO: plusieurs 404 -->
+                        <li><a href="mentions-legales.html">Mentions Légales</a></li>
+                        <li><a href="cgv.html">CGV</a></li>
+                        <li><a href="plan-du-site.html">Plan du Site</a></li>
+                        <li><a href="guide/morphologie.html">Guide Morphologie</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4>Contact</h4>
+                    <ul>
+                        <li>12 Rue du Faubourg Saint-Honoré</li>
+                        <li>75008 Paris, France</li>
+                        <li>contact@modestyle-paris.fr</li>
+                        <li>+33 1 42 68 00 00</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2025 ModeStyle Paris — Tous droits réservés</span>
+                <!-- BUG SEO: lien externe cassé -->
+                <a href="https://www.fashion-federation-inexistante.org">Fédération de la Mode</a>
+            </div>
+        </div>
     </footer>"""
 
+PARAGRAPHS = [
+    "Explorez les dernières tendances de la mode parisienne. Notre sélection est soigneusement choisie par nos stylistes pour vous offrir le meilleur de la mode contemporaine.",
+    "Chaque pièce de notre collection raconte une histoire. Du tissu à la couture, nous mettons l'accent sur la qualité et le savoir-faire artisanal français qui fait la renommée de la mode parisienne dans le monde entier.",
+    "La mode est un art de vivre. Chez ModeStyle Paris, nous croyons que chaque femme et chaque homme mérite de se sentir unique et élégant au quotidien, quelles que soient les circonstances.",
+    "Nos créateurs s'inspirent des défilés parisiens et milanais pour vous proposer des pièces intemporelles qui traversent les saisons avec élégance et raffinement.",
+    "Découvrez une mode responsable et éthique. Nous travaillons avec des fournisseurs certifiés pour réduire notre impact environnemental tout en maintenant une qualité exceptionnelle.",
+    "Le style n'a pas de prix. Retrouvez nos collections à des prix accessibles, sans compromis sur la qualité des matières et des finitions haut de gamme.",
+]
 
-def broken_img_tag():
-    """Return an <img> with broken src and no alt."""
-    src = random.choice(BROKEN_IMAGES)
-    return f'<img src="/{src}">'
+def lorem():
+    return "\n".join(f"<p>{p}</p>" for p in random.sample(PARAGRAPHS, k=random.randint(2, 3)))
 
+# ═══════════════════════════════════════════════════════
+# PAGE GENERATOR
+# ═══════════════════════════════════════════════════════
 
-def img_no_alt():
-    """Return an <img> with valid src but NO alt."""
-    src = random.choice(REAL_IMAGES)
-    return f'<img src="{src}">'
-
-
-def img_ok(alt="Photo de mode"):
-    src = random.choice(REAL_IMAGES)
-    return f'<img src="{src}" alt="{alt}">'
-
-
-def lorem_fashion():
-    paragraphs = [
-        "Explorez les dernières tendances de la mode parisienne. Notre sélection est soigneusement choisie par nos stylistes pour vous offrir le meilleur de la mode contemporaine.",
-        "Chaque pièce de notre collection raconte une histoire. Du tissu à la couture, nous mettons l'accent sur la qualité et le savoir-faire artisanal français.",
-        "La mode est un art de vivre. Chez ModeStyle Paris, nous croyons que chaque femme et chaque homme mérite de se sentir unique et élégant au quotidien.",
-        "Nos créateurs s'inspirent des défilés parisiens et milanais pour vous proposer des pièces intemporelles qui traversent les saisons avec élégance.",
-        "Découvrez une mode responsable et éthique. Nous travaillons avec des fournisseurs certifiés pour réduire notre impact environnemental tout en maintenant une qualité exceptionnelle.",
-        "Le style n'a pas de prix. Retrouvez nos collections à des prix accessibles, sans compromis sur la qualité des matières et des finitions.",
-    ]
-    return "\n".join(f"<p>{p}</p>" for p in random.sample(paragraphs, k=random.randint(2, 4)))
-
-
-def write_page(path, content):
-    full_path = os.path.join(OUTPUT_DIR, path)
-    os.makedirs(os.path.dirname(full_path), exist_ok=True)
-    with open(full_path, "w", encoding="utf-8") as f:
+def write_file(path, content):
+    fp = os.path.join(BASE, path)
+    os.makedirs(os.path.dirname(fp), exist_ok=True)
+    with open(fp, "w", encoding="utf-8") as f:
         f.write(content)
 
+def seo_issues(index):
+    """Return a set of SEO issues based on page index for variety."""
+    issues = set()
+    r = random.random()
+    if r < 0.12: issues.add("empty_title")
+    elif r < 0.25: issues.add("dup_title")
+    elif r < 0.32: issues.add("long_title")
+    if random.random() < 0.18: issues.add("no_h1")
+    if random.random() < 0.12: issues.add("multi_h1")
+    if random.random() < 0.22: issues.add("no_meta")
+    if random.random() < 0.18: issues.add("dup_meta")
+    if random.random() < 0.30: issues.add("broken_img")
+    if random.random() < 0.35: issues.add("no_alt")
+    if random.random() < 0.10: issues.add("bad_canonical")
+    return issues
 
-def make_page(path, title, meta_desc, h1, body_content, canonical=None, extra_issues=None):
-    """Generate an HTML page with optional SEO issues."""
-    extra_issues = extra_issues or []
+def title_tag(title, issues):
+    if "empty_title" in issues: return "<title></title>"
+    if "long_title" in issues: return f"<title>{LONG_TITLE}</title>"
+    if "dup_title" in issues: return f"<title>{random.choice(DUPLICATE_TITLES)}</title>"
+    return f"<title>{title}</title>"
 
-    # Title tag
-    if "empty_title" in extra_issues:
-        title_tag = "<title></title>"
-    elif "long_title" in extra_issues:
-        title_tag = f"<title>{VERY_LONG_TITLE}</title>"
-    elif "duplicate_title" in extra_issues:
-        title_tag = f"<title>{random.choice(DUPLICATE_TITLES)}</title>"
-    else:
-        title_tag = f"<title>{title}</title>"
+def meta_tag(desc, issues):
+    if "no_meta" in issues: return ""
+    if "dup_meta" in issues: return f'<meta name="description" content="{DUPLICATE_META}">'
+    return f'<meta name="description" content="{desc}">'
 
-    # Meta description
-    if "no_meta_desc" in extra_issues:
-        meta_tag = ""
-    elif "duplicate_meta_desc" in extra_issues:
-        meta_tag = f'<meta name="description" content="{DUPLICATE_META_DESC}">'
-    else:
-        meta_tag = f'<meta name="description" content="{meta_desc}">' if meta_desc else ""
+def canonical_tag(path, issues):
+    if "bad_canonical" in issues:
+        return f'<link rel="canonical" href="{DOMAIN}/{random.choice(GHOST_PAGES)}.html">'
+    return f'<link rel="canonical" href="{DOMAIN}/{path}">'
 
-    # Canonical
-    if "wrong_canonical" in extra_issues:
-        canon = f'<link rel="canonical" href="{DOMAIN}/{random.choice(GHOST_PAGES)}.html">'
-    elif canonical:
-        canon = f'<link rel="canonical" href="{DOMAIN}/{canonical}">'
-    else:
-        canon = f'<link rel="canonical" href="{DOMAIN}/{path}">'
+def h1_tag(text, issues):
+    if "no_h1" in issues: return ""
+    if "multi_h1" in issues: return f"<h1>{text}</h1>\n<h1>Bienvenue chez ModeStyle Paris</h1>"
+    return f"<h1>{text}</h1>"
 
-    # H1
-    if "no_h1" in extra_issues:
-        h1_tag = ""
-    elif "multiple_h1" in extra_issues:
-        h1_tag = f"<h1>{h1}</h1>\n<h1>Bienvenue chez ModeStyle Paris</h1>"
-    else:
-        h1_tag = f"<h1>{h1}</h1>" if h1 else ""
+def ghost_links(n=2):
+    gs = random.sample(GHOST_PAGES, k=min(n, len(GHOST_PAGES)))
+    return "\n".join(f'<a href="{g}.html" class="btn btn-dark">{g.replace("-"," ").title()}</a>' for g in gs)
 
-    # Sprinkle broken images
-    extra_images = ""
-    if "broken_images" in extra_issues:
-        extra_images += broken_img_tag() + "\n" + broken_img_tag() + "\n"
-    if "no_alt_images" in extra_issues:
-        extra_images += img_no_alt() + "\n" + img_no_alt() + "\n"
+# ═══════════════════════════════════════════════════════
+# PAGE BUILDERS
+# ═══════════════════════════════════════════════════════
 
-    # 404 links
-    broken_links = ""
-    if "broken_links" in extra_issues:
-        ghosts = random.sample(GHOST_PAGES, k=random.randint(1, 3))
-        broken_links = "\n".join(f'<a href="/{g}.html">Voir {g.replace("-", " ").title()}</a>' for g in ghosts)
-
+def build_page(path, title, desc, body, issues=None):
+    issues = issues or set()
     html = f"""<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {title_tag}
-    {meta_tag}
-    {canon}
-    <link rel="stylesheet" href="/css/style.css">
+    {title_tag(title, issues)}
+    {meta_tag(desc, issues)}
+    {canonical_tag(path, issues)}
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    {nav_html()}
-    <main>
-        {h1_tag}
-        {extra_images}
-        {body_content}
-        {broken_links}
-    </main>
+    {top_bar()}
+    {header_html()}
+    {body}
     {footer_html()}
 </body>
 </html>"""
-
-    write_page(path, html)
+    write_file(path, html)
     all_pages.append(path)
 
+# ─── HOMEPAGE ──────────────────────────────────────────
 
-# ─── Generate pages ─────────────────────────────────────────────────
-
-# 1. Homepage - duplicate title, multiple H1, broken images
-make_page(
-    "index.html",
-    "Mode & Style - Votre Boutique en Ligne",
-    "Bienvenue sur ModeStyle Paris, votre destination mode en ligne.",
-    "ModeStyle Paris - Mode Femme & Homme",
-    f"""
-    {img_no_alt()}
-    {broken_img_tag()}
-    <h2>Nos Collections</h2>
-    {lorem_fashion()}
-    <h2>Nouveautés</h2>
-    {img_no_alt()}
-    <p>Découvrez nos dernières arrivées :</p>
-    <ul>
-        <li><a href="/robes/robe-soiree-noire.html">Robe de Soirée Noire</a></li>
-        <li><a href="/soldes-hiver-2024.html">Soldes d'Hiver</a></li>
-        <li><a href="/chaussures/escarpins-noirs.html">Escarpins Noirs</a></li>
-        <li><a href="/collection-limitee-ete.html">Collection Limitée Été</a></li>
-        <li><a href="/lookbook-printemps.html">Lookbook Printemps</a></li>
-    </ul>
-    """,
-    extra_issues=["duplicate_title", "multiple_h1", "broken_images", "no_alt_images"]
-)
-
-# 2. Category pages
-for i, (cat_slug, cat_name) in enumerate(CATEGORIES):
-    issues = []
-    meta = f"Découvrez notre collection de {cat_name.lower()}. Les plus belles pièces de la mode parisienne."
-
-    if i in [0, 3]:
-        issues.append("duplicate_title")
-    if i in [1, 5]:
-        issues.append("no_h1")
-    if i in [2, 7]:
-        issues.append("no_meta_desc")
-    if i in [4, 6]:
-        issues.append("duplicate_meta_desc")
-    if i in [0, 2, 5, 8]:
-        issues.append("broken_images")
-    if i in [1, 3, 6, 9]:
-        issues.append("no_alt_images")
-    if i in [0, 4, 7]:
-        issues.append("broken_links")
-
-    products_in_cat = PRODUCTS.get(cat_slug, [])
-    product_links = "\n".join(
-        f'<li><a href="/{cat_slug}/{slug}.html">{name}</a></li>'
-        for slug, name in products_in_cat
-    )
-    # Add some broken product links
-    product_links += f'\n<li><a href="/{cat_slug}/produit-supprime-ancien.html">Article en Rupture</a></li>'
-    product_links += f'\n<li><a href="/{cat_slug}/collection-archivee.html">Collection Archivée</a></li>'
-
-    make_page(
-        f"{cat_slug}/index.html",
-        f"{cat_name} - Collection ModeStyle Paris",
-        meta,
-        f"Collection {cat_name}",
-        f"""
-        {img_ok(f"Collection {cat_name}") if i % 3 == 0 else img_no_alt()}
-        {lorem_fashion()}
-        <h2>Nos {cat_name}</h2>
-        <ul>{product_links}</ul>
-        """,
-        extra_issues=issues
-    )
-
-# 3. Product pages
-page_count = 12  # already have index + 10 categories + 1
-for cat_slug, cat_name in CATEGORIES:
-    for j, (prod_slug, prod_name) in enumerate(PRODUCTS.get(cat_slug, [])):
-        issues = []
-        meta = f"{prod_name} - Achetez en ligne sur ModeStyle Paris. Livraison rapide."
-
-        # Distribute SEO issues
-        r = random.random()
-        if r < 0.12:
-            issues.append("empty_title")
-        elif r < 0.22:
-            issues.append("long_title")
-        elif r < 0.35:
-            issues.append("duplicate_title")
-
-        if random.random() < 0.2:
-            issues.append("no_h1")
-        if random.random() < 0.15:
-            issues.append("multiple_h1")
-        if random.random() < 0.25:
-            issues.append("no_meta_desc")
-        if random.random() < 0.2:
-            issues.append("duplicate_meta_desc")
-        if random.random() < 0.3:
-            issues.append("broken_images")
-        if random.random() < 0.35:
-            issues.append("no_alt_images")
-        if random.random() < 0.25:
-            issues.append("broken_links")
-        if random.random() < 0.1:
-            issues.append("wrong_canonical")
-
-        # Related products with some 404s
-        related = ""
-        all_prods = [(cs, ps, pn) for cs, cn in CATEGORIES for ps, pn in PRODUCTS.get(cs, [])]
-        sample_related = random.sample(all_prods, k=min(3, len(all_prods)))
-        related_links = "\n".join(
-            f'<li><a href="/{cs}/{ps}.html">{pn}</a></li>'
-            for cs, ps, pn in sample_related
-        )
-        # Add a 404 related link
-        related_links += f'\n<li><a href="/{cat_slug}/{random.choice(GHOST_PAGES)}.html">Voir aussi</a></li>'
-
-        price = f"{random.randint(29, 499)},00 €"
-
-        make_page(
-            f"{cat_slug}/{prod_slug}.html",
-            f"{prod_name} | ModeStyle Paris",
-            meta,
-            prod_name,
-            f"""
-            <div class="product">
-                {broken_img_tag() if "broken_images" in issues else img_no_alt()}
-                <p class="price">{price}</p>
-                {lorem_fashion()}
-                <h2>Produits Similaires</h2>
-                <ul>{related_links}</ul>
+def build_homepage():
+    cat_cards = ""
+    for slug, name, img_key, desc in CATEGORIES[:6]:
+        cat_cards += f"""
+        <a href="{slug}/index.html" class="category-card">
+            {img_no_alt(img_key)}
+            <div class="overlay">
+                <h3>{name}</h3>
+                <span>Découvrir</span>
             </div>
-            """,
-            extra_issues=issues
-        )
-        page_count += 1
+        </a>"""
 
-# 4. Blog pages
-os.makedirs(os.path.join(OUTPUT_DIR, "blog"), exist_ok=True)
+    # Product cards with mix of broken/missing alt
+    prod_cards = ""
+    sample_prods = []
+    for cat_slug, _, _, _ in CATEGORIES[:5]:
+        for p in PRODUCTS.get(cat_slug, [])[:2]:
+            sample_prods.append((cat_slug, p))
+    random.shuffle(sample_prods)
+    for i, (cs, (ps, pn, brand, price, img_key)) in enumerate(sample_prods[:8]):
+        if i == 2:
+            img_tag = broken_img()  # BUG: image cassée
+        elif i % 3 == 0:
+            img_tag = img_no_alt(img_key)  # BUG: pas d'alt
+        else:
+            img_tag = img_ok(img_key, pn)
+        badge = '<span class="badge">Nouveau</span>' if i < 2 else ""
+        old = f'<span class="old-price">{price + random.randint(30,80)},00 €</span>' if price > 0 and random.random() > 0.6 else ""
+        prod_cards += f"""
+        <a href="{cs}/{ps}.html" class="product-card">
+            <div class="image-wrapper">
+                {img_tag}
+                {badge}
+            </div>
+            <div class="info">
+                <div class="brand">{brand}</div>
+                <h3>{pn}</h3>
+                <div class="price">{price},00 €{old}</div>
+            </div>
+        </a>"""
 
-# Blog index - no H1, duplicate meta
-make_page(
-    "blog/index.html",
-    "Blog Mode - ModeStyle Paris",
-    DUPLICATE_META_DESC,
-    "Notre Blog Mode",
-    f"""
-    {img_no_alt()}
-    <p>Retrouvez tous nos articles mode, conseils style et actualités fashion.</p>
-    <ul>
-    {"".join(f'<li><a href="/{slug}.html">{title}</a></li>' for slug, title in BLOG_ARTICLES)}
-    <li><a href="/blog/article-supprime.html">Les Tendances Oubliées</a></li>
-    <li><a href="/blog/guide-perdu.html">Guide Disparu</a></li>
-    </ul>
-    """,
-    extra_issues=["duplicate_meta_desc", "no_alt_images"]
-)
-page_count += 1
+    blog_cards = ""
+    for slug, title, cat, excerpt, img_key in BLOG_ARTICLES[:3]:
+        blog_cards += f"""
+        <a href="{slug}.html" class="blog-card">
+            <div class="image-wrapper">
+                {img_no_alt(img_key)}
+            </div>
+            <div class="content">
+                <div class="meta">{cat}</div>
+                <h3>{title}</h3>
+                <p>{excerpt[:120]}...</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>"""
 
-for k, (blog_slug, blog_title) in enumerate(BLOG_ARTICLES):
-    issues = []
-    meta = f"{blog_title} - Conseils et inspirations mode sur le blog ModeStyle Paris."
+    body = f"""
+    <section class="hero">
+        {img_no_alt("hero")}
+        <img src="{img_path('hero')}" class="hero-bg">
+        <div class="hero-content">
+            <h1>L'Élégance à la Parisienne</h1>
+            <p>Découvrez notre nouvelle collection printemps-été 2025, inspirée par les rues de Paris.</p>
+            <a href="soldes-hiver-2024.html" class="btn">Découvrir la Collection</a>
+        </div>
+    </section>
 
-    if k in [0, 4]:
-        issues.append("duplicate_title")
-    if k in [1, 6]:
-        issues.append("no_h1")
-    if k in [2, 8]:
-        issues.append("empty_title")
-    if k in [3]:
-        issues.append("long_title")
-    if k in [5, 9]:
-        issues.append("multiple_h1")
-    if k % 2 == 0:
-        issues.append("broken_images")
-        issues.append("no_alt_images")
-    if k in [1, 3, 7]:
-        issues.append("broken_links")
-    if k in [2, 5]:
-        issues.append("wrong_canonical")
-    if k in [0, 4, 8]:
-        issues.append("no_meta_desc")
+    <section class="categories-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Nos Univers</h2>
+                <div class="divider"></div>
+                <p>Explorez nos collections soigneusement sélectionnées par nos stylistes parisiens.</p>
+            </div>
+            <div class="categories-grid">
+                {cat_cards}
+            </div>
+        </div>
+    </section>
 
-    make_page(
-        f"{blog_slug}.html",
-        f"{blog_title} | Blog ModeStyle Paris",
-        meta,
-        blog_title,
-        f"""
-        <article>
-            <p class="date">Publié le {random.randint(1,28)} {random.choice(['janvier','février','mars','avril','mai','juin'])} 2025</p>
-            {img_ok(blog_title) if k % 3 == 0 else img_no_alt()}
-            {lorem_fashion()}
-            {lorem_fashion()}
-            <h2>À lire aussi</h2>
-            <ul>
-                <li><a href="/{random.choice(GHOST_PAGES)}.html">Article connexe</a></li>
-                <li><a href="/blog/{random.choice(GHOST_PAGES)}.html">Guide complémentaire</a></li>
-            </ul>
-        </article>
-        """,
-        extra_issues=issues
-    )
-    page_count += 1
+    <section class="featured-banner">
+        {img_no_alt("defile")}
+        <div class="content">
+            <h2>Collection Exclusive Printemps 2025</h2>
+            <p>Des pièces uniques créées en collaboration avec les plus grands designers français. Disponible en édition limitée.</p>
+            <a href="collection-limitee-ete.html" class="btn">Voir la Collection</a>
+        </div>
+    </section>
 
-# 5. Fill up to ~100 pages with extra "landing" pages
-EXTRA_PAGES = [
-    ("promo/ete-2025", "Promotions Été 2025"),
-    ("promo/hiver-2025", "Promotions Hiver 2025"),
-    ("promo/black-friday", "Black Friday Mode"),
-    ("promo/soldes-finales", "Soldes Finales"),
-    ("guide/morphologie", "Guide Morphologie"),
-    ("guide/couleurs-peau", "Quelles Couleurs pour Ma Peau"),
-    ("guide/dress-code-bureau", "Dress Code Bureau"),
-    ("guide/mode-grande-taille", "Mode Grande Taille"),
-    ("guide/style-minimaliste", "Le Style Minimaliste"),
-    ("inspiration/look-casual", "Look Casual Chic"),
-    ("inspiration/look-soiree", "Look Soirée Glamour"),
-    ("inspiration/look-bureau", "Look Bureau Tendance"),
-    ("inspiration/look-weekend", "Look Weekend Décontracté"),
-    ("inspiration/look-vacances", "Look Vacances"),
-    ("marques/chanel", "Chanel - Nos Sélections"),
-    ("marques/dior", "Dior - Nos Sélections"),
-    ("marques/louis-vuitton", "Louis Vuitton - Nos Sélections"),
-    ("marques/hermes", "Hermès - Nos Sélections"),
-    ("marques/prada", "Prada - Nos Sélections"),
-    ("marques/gucci", "Gucci - Nos Sélections"),
-    ("marques/balenciaga", "Balenciaga - Nos Sélections"),
-    ("marques/valentino", "Valentino - Nos Sélections"),
-    ("collections/printemps-2025", "Collection Printemps 2025"),
-    ("collections/ete-2025", "Collection Été 2025"),
-    ("collections/automne-2025", "Collection Automne 2025"),
-    ("collections/hiver-2025", "Collection Hiver 2025"),
-    ("guide/entretien-soie", "Entretien de la Soie"),
-    ("guide/choisir-parfum", "Comment Choisir son Parfum"),
-    ("inspiration/look-festival", "Look Festival"),
-    ("inspiration/look-mariage", "Look Invitée Mariage"),
-]
+    <section class="products-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sélection du Moment</h2>
+                <div class="divider"></div>
+                <p>Les pièces incontournables choisies par notre équipe de stylistes.</p>
+            </div>
+            <div class="products-grid">
+                {prod_cards}
+            </div>
+        </div>
+    </section>
 
-for m, (extra_slug, extra_title) in enumerate(EXTRA_PAGES):
-    if page_count >= 100:
+    <section class="featured-banner">
+        {broken_img()}
+        <div class="content">
+            <h2>Mode Homme — Nouvelle Saison</h2>
+            <p>Élégance et modernité pour l'homme contemporain. Découvrez notre sélection masculine.</p>
+            <a href="vetements-homme/index.html" class="btn">Explorer</a>
+        </div>
+    </section>
+
+    <section class="blog-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Le Journal Mode</h2>
+                <div class="divider"></div>
+                <p>Tendances, conseils et inspirations par nos experts mode.</p>
+            </div>
+            <div class="blog-grid">
+                {blog_cards}
+            </div>
+        </div>
+    </section>"""
+
+    build_page("index.html", "Mode & Style — Votre Boutique en Ligne",
+               "ModeStyle Paris — votre destination mode en ligne. Collections femme et homme, livraison gratuite.",
+               body, {"dup_title", "multi_h1", "no_alt", "broken_img"})
+
+# ─── CATEGORY PAGES ──────────────────────────────────
+
+def build_category(idx, slug, name, img_key, desc):
+    issues = set()
+    if idx in [0, 3]: issues.add("dup_title")
+    if idx in [1, 5]: issues.add("no_h1")
+    if idx in [2, 7]: issues.add("no_meta")
+    if idx in [4, 6]: issues.add("dup_meta")
+    if idx in [0, 5, 8]: issues.add("broken_img")
+    if idx in [1, 3, 6, 9]: issues.add("no_alt")
+    if idx in [0, 4, 7]: issues.add("bad_canonical")
+
+    prods = PRODUCTS.get(slug, [])
+    cards = ""
+    for j, (ps, pn, brand, price, pimg) in enumerate(prods):
+        if j == 0 and "broken_img" in issues:
+            img_t = broken_img()
+        elif "no_alt" in issues:
+            img_t = img_no_alt(pimg)
+        else:
+            img_t = img_ok(pimg, pn)
+        badge = '<span class="badge">-30%</span>' if random.random() > 0.7 else ""
+        old = f'<span class="old-price">{price + random.randint(30,100)},00 €</span>' if price > 0 and random.random() > 0.5 else ""
+        cards += f"""
+        <a href="{slug}/{ps}.html" class="product-card">
+            <div class="image-wrapper">{img_t}{badge}</div>
+            <div class="info">
+                <div class="brand">{brand}</div>
+                <h3>{pn}</h3>
+                <div class="price">{"" if price == 0 else f"{price},00 €"}{old}</div>
+            </div>
+        </a>"""
+
+    # BUG: liens vers produits inexistants
+    cards += f"""
+    <a href="{slug}/produit-supprime-ancien.html" class="product-card">
+        <div class="image-wrapper">{broken_img()}</div>
+        <div class="info"><div class="brand">ARCHIVE</div><h3>Article en Rupture</h3><div class="price">--,-- €</div></div>
+    </a>
+    <a href="{slug}/collection-archivee.html" class="product-card">
+        <div class="image-wrapper">{img_no_alt(img_key)}</div>
+        <div class="info"><div class="brand">ARCHIVE</div><h3>Collection Archivée</h3><div class="price">--,-- €</div></div>
+    </a>"""
+
+    body = f"""
+    <section class="page-header">
+        {img_ok(img_key, f"Collection {name}") if idx % 2 == 0 else img_no_alt(img_key)}
+        <div class="content">
+            {h1_tag(f"Collection {name}", issues)}
+            <p>{desc}</p>
+        </div>
+    </section>
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Accueil</a> <span>›</span> {name}
+        </div>
+    </div>
+    <section class="products-section">
+        <div class="container">
+            <div class="products-grid">{cards}</div>
+        </div>
+    </section>"""
+
+    build_page(f"{slug}/index.html", f"{name} — Collection ModeStyle Paris", desc, body, issues)
+
+# ─── PRODUCT PAGES ─────────────────────────────────────
+
+def build_product(cat_slug, cat_name, prod_slug, prod_name, brand, price, img_key, idx):
+    issues = seo_issues(idx)
+
+    # Related products
+    all_prods = [(cs, ps, pn, br, pr, ik) for cs, _, _, _ in CATEGORIES for ps, pn, br, pr, ik in PRODUCTS.get(cs, [])]
+    related = random.sample(all_prods, k=min(4, len(all_prods)))
+    related_cards = ""
+    for cs, ps, pn, br, pr, ik in related:
+        related_cards += f"""
+        <a href="{cs}/{ps}.html" class="product-card">
+            <div class="image-wrapper">{img_no_alt(ik)}</div>
+            <div class="info"><div class="brand">{br}</div><h3>{pn}</h3><div class="price">{"" if pr == 0 else f"{pr},00 €"}</div></div>
+        </a>"""
+    # BUG: related 404
+    related_cards += f"""
+    <a href="{cat_slug}/{random.choice(GHOST_PAGES)}.html" class="product-card">
+        <div class="image-wrapper">{broken_img()}</div>
+        <div class="info"><div class="brand">ARCHIVE</div><h3>Article Similaire</h3><div class="price">--,-- €</div></div>
+    </a>"""
+
+    main_img = broken_img() if "broken_img" in issues else (img_no_alt(img_key) if "no_alt" in issues else img_ok(img_key, prod_name))
+    thumbs = "".join(img_no_alt(random.choice(list(IMG.keys()))) for _ in range(3))
+
+    body = f"""
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="index.html">Accueil</a> <span>›</span>
+            <a href="{cat_slug}/index.html">{cat_name}</a> <span>›</span> {prod_name}
+        </div>
+    </div>
+    <section class="product-detail">
+        <div class="container">
+            <div class="product-detail-grid">
+                <div class="product-gallery">
+                    {main_img}
+                    <div class="thumbnails">{thumbs}</div>
+                </div>
+                <div class="product-info">
+                    {h1_tag(prod_name, issues)}
+                    <div class="brand-name">{brand}</div>
+                    <div class="price-block">{"Lire l'article" if price == 0 else f"{price},00 €"}</div>
+                    <div class="description">{lorem()}</div>
+                    {"" if price == 0 else '<a href="#" class="add-to-cart">Ajouter au Panier</a>'}
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="related-products">
+        <div class="container">
+            <div class="section-title"><h2>Vous Aimerez Aussi</h2><div class="divider"></div></div>
+            <div class="products-grid">{related_cards}</div>
+        </div>
+    </section>"""
+
+    build_page(f"{cat_slug}/{prod_slug}.html", f"{prod_name} | ModeStyle Paris",
+               f"{prod_name} — {brand}. Achetez en ligne sur ModeStyle Paris. Livraison gratuite dès 100€.",
+               body, issues)
+
+# ─── BLOG PAGES ────────────────────────────────────────
+
+def build_blog_index():
+    cards = ""
+    for slug, title, cat, excerpt, img_key in BLOG_ARTICLES:
+        cards += f"""
+        <a href="{slug}.html" class="blog-card">
+            <div class="image-wrapper">{img_no_alt(img_key)}</div>
+            <div class="content">
+                <div class="meta">{cat}</div>
+                <h3>{title}</h3>
+                <p>{excerpt[:140]}...</p>
+                <span class="read-more">Lire la suite</span>
+            </div>
+        </a>"""
+    # 404 blog links
+    cards += f"""
+    <a href="blog/article-supprime.html" class="blog-card">
+        <div class="image-wrapper">{broken_img()}</div>
+        <div class="content"><div class="meta">ARCHIVE</div><h3>Les Tendances Oubliées</h3><p>Cet article n'est plus disponible...</p></div>
+    </a>"""
+
+    body = f"""
+    <section class="page-header">
+        {img_no_alt("runway")}
+        <div class="content"><h1>Le Journal Mode</h1><p>Tendances, guides et inspirations par nos experts</p></div>
+    </section>
+    <section class="blog-section">
+        <div class="container">
+            <div class="blog-grid">{cards}</div>
+        </div>
+    </section>"""
+
+    build_page("blog/index.html", "Blog Mode — ModeStyle Paris", DUPLICATE_META, body, {"dup_meta", "no_alt"})
+
+
+def build_blog_article(idx, slug, title, cat, excerpt, img_key):
+    issues = set()
+    if idx in [0, 4]: issues.add("dup_title")
+    if idx in [1, 6]: issues.add("no_h1")
+    if idx in [2, 8]: issues.add("empty_title")
+    if idx == 3: issues.add("long_title")
+    if idx in [5, 9]: issues.add("multi_h1")
+    if idx % 2 == 0: issues.add("broken_img"); issues.add("no_alt")
+    if idx in [1, 3, 7]: issues.add("bad_canonical")
+    if idx in [0, 4, 8]: issues.add("no_meta")
+
+    date = f"{random.randint(1,28)} {random.choice(['janvier','février','mars','avril','mai','juin'])} 2025"
+    featured = broken_img() if "broken_img" in issues else img_ok(img_key, title)
+
+    body = f"""
+    <section class="article-page">
+        <div class="container">
+            <div class="article-header">
+                <div class="meta">{cat} — {date}</div>
+                {h1_tag(title, issues)}
+                <p class="subtitle">{excerpt}</p>
+            </div>
+            {featured}
+            <div class="article-content">
+                {lorem()}
+                <h2>L'Essentiel à Retenir</h2>
+                {lorem()}
+                <blockquote>« La mode se démode, le style jamais. » — Coco Chanel</blockquote>
+                {lorem()}
+                <h2>Nos Recommandations</h2>
+                {lorem()}
+                <p><a href="{random.choice(GHOST_PAGES)}.html">Découvrir nos sélections associées</a></p>
+                <p><a href="blog/{random.choice(GHOST_PAGES)}.html">Lire notre guide complémentaire</a></p>
+            </div>
+        </div>
+    </section>"""
+
+    build_page(f"{slug}.html", f"{title} | Journal ModeStyle Paris",
+               f"{title} — {excerpt[:100]}", body, issues)
+
+# ─── EXTRA PAGES ────────────────────────────────────────
+
+def build_extra(idx, slug, title, img_key):
+    issues = set()
+    if idx % 4 == 0: issues.add("dup_title")
+    if idx % 5 == 0: issues.add("no_h1")
+    if idx % 3 == 0: issues.add("broken_img")
+    if idx % 2 == 0: issues.add("no_alt")
+    if idx % 6 == 0: issues.add("bad_canonical")
+    if idx % 4 == 1: issues.add("no_meta")
+    if idx % 5 == 2: issues.add("multi_h1")
+
+    header_img = broken_img() if "broken_img" in issues else (img_no_alt(img_key) if "no_alt" in issues else img_ok(img_key, title))
+
+    body = f"""
+    <section class="page-header">
+        {header_img}
+        <div class="content">
+            {h1_tag(title, issues)}
+            <p>Découvrez notre sélection exclusive chez ModeStyle Paris.</p>
+        </div>
+    </section>
+    <div class="container">
+        <div class="breadcrumb"><a href="index.html">Accueil</a> <span>›</span> {title}</div>
+    </div>
+    <section class="products-section">
+        <div class="container">
+            {lorem()}
+            {img_no_alt(img_key) if "no_alt" in issues else img_ok(img_key, title)}
+            {lorem()}
+            <p style="margin-top:32px">{ghost_links(2)}</p>
+        </div>
+    </section>"""
+
+    build_page(f"{slug}.html", f"{title} | ModeStyle Paris",
+               f"{title} — Découvrez nos sélections mode exclusives chez ModeStyle Paris.",
+               body, issues)
+
+# ═══════════════════════════════════════════════════════
+# MAIN BUILD
+# ═══════════════════════════════════════════════════════
+
+print("🔨 Building ModeStyle Paris...")
+
+# Homepage
+build_homepage()
+
+# Categories
+for i, (slug, name, img_key, desc) in enumerate(CATEGORIES):
+    build_category(i, slug, name, img_key, desc)
+
+# Products
+page_idx = 11
+for cat_slug, cat_name, _, _ in CATEGORIES:
+    for prod_slug, prod_name, brand, price, img_key in PRODUCTS.get(cat_slug, []):
+        build_product(cat_slug, cat_name, prod_slug, prod_name, brand, price, img_key, page_idx)
+        page_idx += 1
+
+# Blog
+build_blog_index()
+page_idx += 1
+for i, (slug, title, cat, excerpt, img_key) in enumerate(BLOG_ARTICLES):
+    build_blog_article(i, slug, title, cat, excerpt, img_key)
+    page_idx += 1
+
+# Extra pages
+for i, (slug, title, img_key) in enumerate(EXTRA_PAGES):
+    if page_idx > 110:
         break
-    issues = []
-    if m % 4 == 0:
-        issues.append("duplicate_title")
-    if m % 5 == 0:
-        issues.append("no_h1")
-    if m % 3 == 0:
-        issues.append("broken_images")
-    if m % 2 == 0:
-        issues.append("no_alt_images")
-    if m % 6 == 0:
-        issues.append("wrong_canonical")
-    if m % 4 == 1:
-        issues.append("no_meta_desc")
-    if m % 7 == 0:
-        issues.append("broken_links")
-    if m % 5 == 2:
-        issues.append("multiple_h1")
+    build_extra(i, slug, title, img_key)
+    page_idx += 1
 
-    make_page(
-        f"{extra_slug}.html",
-        f"{extra_title} | ModeStyle Paris",
-        f"{extra_title} - Découvrez nos sélections mode exclusives chez ModeStyle Paris.",
-        extra_title,
-        f"""
-        {img_no_alt()}
-        {lorem_fashion()}
-        <h2>Nos Recommandations</h2>
-        {lorem_fashion()}
-        <a href="/{random.choice(GHOST_PAGES)}.html">Découvrir plus</a>
-        """,
-        extra_issues=issues
-    )
-    page_count += 1
+# ═══════════════════════════════════════════════════════
+# ROBOTS.TXT & SITEMAP.XML
+# ═══════════════════════════════════════════════════════
 
-
-# ─── robots.txt (GOOD) ─────────────────────────────────────────────
-
-robots_txt = f"""User-agent: *
+write_file("robots.txt", f"""User-agent: *
 Allow: /
 
 Disallow: /admin/
 Disallow: /api/
 Disallow: /tmp/
 Disallow: /private/
+Disallow: /checkout/
+Disallow: /cart/
 
-# Crawl-delay
 Crawl-delay: 1
 
-# Sitemap
 Sitemap: {DOMAIN}/sitemap.xml
-"""
-write_page("robots.txt", robots_txt)
-
-
-# ─── sitemap.xml (GOOD) ────────────────────────────────────────────
+""")
 
 today = datetime.date.today().isoformat()
-sitemap_entries = []
-for page_path in all_pages:
-    priority = "1.0" if page_path == "index.html" else "0.8" if "/index.html" in page_path else "0.6"
-    freq = "daily" if page_path == "index.html" else "weekly"
-    sitemap_entries.append(f"""  <url>
-    <loc>{DOMAIN}/{page_path}</loc>
+entries = []
+for p in all_pages:
+    prio = "1.0" if p == "index.html" else "0.8" if p.endswith("/index.html") else "0.6"
+    freq = "daily" if p == "index.html" else "weekly"
+    entries.append(f"""  <url>
+    <loc>{DOMAIN}/{p}</loc>
     <lastmod>{today}</lastmod>
     <changefreq>{freq}</changefreq>
-    <priority>{priority}</priority>
+    <priority>{prio}</priority>
   </url>""")
 
-sitemap_xml = f"""<?xml version="1.0" encoding="UTF-8"?>
+write_file("sitemap.xml", f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-{"".join(sitemap_entries)}
-</urlset>"""
-write_page("sitemap.xml", sitemap_xml)
+{"".join(entries)}
+</urlset>""")
 
-
-# ─── Minimal CSS ────────────────────────────────────────────────────
-
-css = """
-body { font-family: Georgia, serif; max-width: 960px; margin: 0 auto; padding: 20px; color: #333; }
-nav { background: #1a1a2e; padding: 15px; margin-bottom: 30px; }
-nav a { color: #e94560; text-decoration: none; margin-right: 15px; font-size: 14px; }
-nav a:hover { text-decoration: underline; }
-h1 { color: #1a1a2e; border-bottom: 2px solid #e94560; padding-bottom: 10px; }
-h2 { color: #16213e; }
-.product { border: 1px solid #ddd; padding: 20px; margin: 20px 0; }
-.price { font-size: 24px; color: #e94560; font-weight: bold; }
-img { max-width: 100%; height: auto; margin: 10px 0; }
-footer { margin-top: 50px; padding: 20px; background: #f5f5f5; text-align: center; font-size: 12px; }
-footer a { color: #666; margin: 0 10px; }
-ul { line-height: 2; }
-article .date { color: #999; font-style: italic; }
-"""
-write_page("css/style.css", css)
-
-
-# ─── Summary ────────────────────────────────────────────────────────
-
-print(f"✅ Generated {page_count} pages + robots.txt + sitemap.xml + CSS")
-print(f"   Total files: {len(all_pages) + 3}")
-print(f"   Ghost pages (404 targets): {len(GHOST_PAGES)}")
+print(f"✅ {page_idx} pages + robots.txt + sitemap.xml")
+print(f"   Total HTML files: {len(all_pages)}")
+print(f"   Ghost pages (404): {len(GHOST_PAGES)}")

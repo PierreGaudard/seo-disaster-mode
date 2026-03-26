@@ -5,9 +5,9 @@ Disallow: /admin/
 Disallow: /api/
 Disallow: /tmp/
 Disallow: /private/
+Disallow: /checkout/
+Disallow: /cart/
 
-# Crawl-delay
 Crawl-delay: 1
 
-# Sitemap
-Sitemap: https://www.modestyle-paris.fr/sitemap.xml
+Sitemap: https://pierregaudard.github.io/seo-disaster-mode/sitemap.xml
